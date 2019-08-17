@@ -1,0 +1,35 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: create
+#      validate: validate the schema, makes no changes to the database.
+#      update: update the schema.
+#      create: creates the schema, destroying previous data.
+#      create-drop: drop the schema at the end of the session.
+    show-sql: true
+
+  datasource:
+    url: jdbc:sqlite:data/data.db
+    driver-class-name: org.sqlite.JDBC
+
+#security:
+#  require-ssl: true
+
+server:
+  port: 8090
+#  ssl:
+#    key-store-type: PKCS12
+#    key-store: classpath:keystore.p12
+#    key-store-password: Paparasta1+
+
+quoter:
+  api-version: 1.0
+  url-prefix: quoter/api/v1
+
+  security:
+    secret: "SecretKeyToGenJWTs"
+    expiration-time: 3600000      # tokens valid 1h
+    token-prefix: "Bearer "
+    header-string:  "Authorization"
+    sign-up-url: "/sign-up"
