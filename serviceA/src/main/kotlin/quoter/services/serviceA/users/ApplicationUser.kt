@@ -1,4 +1,4 @@
-package quoter.services.serviceA.model
+package quoter.services.serviceA.users
 
 import javax.persistence.*
 

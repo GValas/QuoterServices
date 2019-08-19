@@ -1,7 +1,6 @@
-package quoter.services.serviceA.repositories
+package quoter.services.serviceA.users
 
 import org.springframework.data.jpa.repository.JpaRepository
-import quoter.services.serviceA.model.ApplicationUser
 
 interface ApplicationUserRepository : JpaRepository<ApplicationUser, Long> {
     fun findByUsername(username: String): ApplicationUser

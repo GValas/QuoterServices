@@ -15,7 +15,7 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import quoter.services.serviceA.QuoterConfiguration
-import quoter.services.serviceA.services.UserDetailsServiceImpl
+import quoter.services.serviceA.users.UserDetailsServiceImpl
 
 @EnableWebSecurity
 class WebSecurity(

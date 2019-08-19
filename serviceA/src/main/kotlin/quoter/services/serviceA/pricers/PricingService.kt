@@ -1,4 +1,4 @@
-package quoter.services.serviceA.services
+package quoter.services.serviceA.pricers
 
 import quoter.services.helper.BlackScholes
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,3 +22,5 @@ class PricingService(@Autowired private val blackScholes: BlackScholes) {
         return Quote(p, d, f, v, df)
     }
 }
+
+

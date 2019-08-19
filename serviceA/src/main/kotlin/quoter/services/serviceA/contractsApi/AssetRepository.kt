@@ -1,4 +1,4 @@
-package quoter.services.serviceA.repositories
+package quoter.services.serviceA.contractsApi
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

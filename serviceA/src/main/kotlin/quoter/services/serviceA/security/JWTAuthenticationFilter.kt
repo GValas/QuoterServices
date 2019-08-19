@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import quoter.services.serviceA.QuoterConfiguration
-import quoter.services.serviceA.model.ApplicationUser
+import quoter.services.serviceA.users.ApplicationUser
 import java.io.IOException
 import java.util.*
 import javax.servlet.FilterChain

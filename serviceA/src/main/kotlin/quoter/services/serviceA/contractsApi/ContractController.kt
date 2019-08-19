@@ -1,10 +1,9 @@
-package quoter.services.serviceA.controllers
+package quoter.services.serviceA.contractsApi
 
 import org.springframework.web.bind.annotation.*
 import quoter.services.model.Contract
 import quoter.services.model.Quote
-import quoter.services.serviceA.repositories.ContractRepository
-import quoter.services.serviceA.services.PricingService
+import quoter.services.serviceA.pricers.PricingService
 import sun.invoke.empty.Empty
 import java.util.*
 
@@ -16,7 +15,7 @@ class ContractController(
 ) {
 
     @GetMapping
-    fun findAll(): Iterable<Contract> {
+    suspend fun findAll(): Iterable<Contract> {
         return contractRepository.findAll()
     }
 
