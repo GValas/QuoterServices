@@ -68,12 +68,12 @@ class DataLoader(
             with(rand) {
                 contractRepository.save(
                         contract {
-                            nominal = (nextDouble() * 10000).roundValueEx(0),
-                            maturity = LocalDateTime.of(2020 + nextInt(5), 1 + nextInt(12), 1 + nextInt(28), 0, 0, 0),
-                            strike = (90 + nextDouble() * 20).roundValueEx(2),
-                            vanillaType = VanillaType.values()[nextInt(VanillaType.values().size)],
-                            exerciseMode = ExerciseMode.values()[nextInt(ExerciseMode.values().size)],
-                            underlying = assets[nextInt(assets.size)],
+                            nominal = (nextDouble() * 10000).roundValueEx(0)
+                            maturity = LocalDateTime.of(2020 + nextInt(5), 1 + nextInt(12), 1 + nextInt(28), 0, 0, 0)
+                            strike = (90 + nextDouble() * 20).roundValueEx(2)
+                            vanillaType = VanillaType.values()[nextInt(VanillaType.values().size)]
+                            exerciseMode = ExerciseMode.values()[nextInt(ExerciseMode.values().size)]
+                            underlying = assets[nextInt(assets.size)]
                             currency = currencies[nextInt(currencies.size)]
                         }
                 )
