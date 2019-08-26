@@ -3,7 +3,7 @@ plugins {
 }
 
 application {
-    mainClassName = "quoter.serviceB.Starter"
+    mainClassName = "quoter.services.serviceB.Starter"
 }
 
 dependencies{

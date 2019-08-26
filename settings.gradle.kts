@@ -3,5 +3,6 @@ include(
     Modules.helper,
     Modules.model,
     Modules.serviceA,
-    Modules.serviceB
+    Modules.serviceB,
+    Modules.scraper
 )

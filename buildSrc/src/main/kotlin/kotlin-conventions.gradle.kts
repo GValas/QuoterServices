@@ -11,6 +11,8 @@ plugins {
 dependencies {
     implementation(Libs.kotlinStdLib)
     implementation(Libs.kotlinReflect)
+    implementation(Libs.kotlinLogging)
+    implementation(Libs.kotlinCoroutines)
 
     testImplementation(TestLibs.assertjCore)
     testImplementation(TestLibs.junitEngine)
