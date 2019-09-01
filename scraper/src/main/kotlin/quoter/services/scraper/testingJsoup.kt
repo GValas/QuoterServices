@@ -11,6 +11,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import quoter.services.scraper.Const.urlRoot
 import java.io.File
+import khttp.get
+import kotlin.math.max
 
 
 object Const {
@@ -19,6 +21,13 @@ object Const {
             "&projects=2" +         // vente(1), achat(2), vente
             "&natures=1,2" +        // neuf(1), ancien(2), viager(3), renovation(4)
             "&enterprise=0"         // pro
+
+    object RegEx {
+        const val properties = "Object\\.defineProperty\\( ConfigDetail, '([^']*)', {\\n\\s+value: \"([^\"]*)\","
+        const val pictures = "(v\\.seloger\\.com/s/(width|height)/(800|799)/visuels/.*\\.jpg)\""
+        const val annonces = "\"(https://www.seloger.com/annonces/achat/.*=ListToDetail)\""
+    }
+
 }
 
 typealias Buckets = Pair<Int?, Int?>
@@ -33,6 +42,7 @@ fun Buckets.toBucketString(): String {
     val b = this.second?.toString() ?: "NaN"
     return "$a/$b"
 }
+
 
 data class SeLogerRequest(
         val types: List<ProjectType>,
@@ -67,46 +77,67 @@ fun main() = runBlocking {
 
     //logger.info { "doc: $doc" }
 
+    val url = req.urlRequest()
+    //val headers = mapOf("user-agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
+
     // get page number
-    val doc = Jsoup.connect(req.urlRequest()).get()
+    val res = get(url)
+    val doc = res.text
+    File("doc.txt").writeText(doc.toString())
 
-    File("src/resources/doc.txt").writeText(doc.toString())
+    val regex = "LISTpg=(\\d*)".toRegex()
+    val maxPg = regex.findAll(doc)
+            .map { it -> it.groups[1] }
+            .filterNotNull()
+            .map { it.value.toInt() }
+            .max()
 
-
-    val nbPages = doc.select("div[class=pagination-number] > a:last-of-type > span").last().text().toInt()
-    repeat(nbPages) {
-        parseOffersList(it, req)
+    if (maxPg != null) {
+        repeat(maxPg) {
+            parsePageList(it + 1, req)
+        }
     }
+
 
 }
 
-private fun CoroutineScope.parseOffersList(it: Int, req: SeLogerRequest) {
+private fun CoroutineScope.parsePageList(pageId: Int, req: SeLogerRequest) {
     launch(Dispatchers.IO) {
-        val page = it + 1
-        Jsoup.connect(req.urlRequest(page)).get().run {
-            select("a[class=c-pa-link link_AB]").forEach {
-                parseOfferContent(it, page)
-            }
-        }
+
+        // getting page
+        val pageUrl = req.urlRequest(pageId)
+        val pageContent = get(pageUrl).text
+        logger.info { "page[$pageId], offerUrl=$pageUrl" }
+
+        // parse annonces
+        Const.RegEx.annonces.toRegex()
+                .findAll(pageContent)
+                .map { it -> it.groups[1]?.value }
+                .distinct().toList().distinct()     // ???
+                .filterNotNull()
+                .forEach {
+
+                    parseAnnonce(it)
+                }
+
     }
 }
 
-private fun CoroutineScope.parseOfferContent(it: Element, page: Int) {
+
+private fun CoroutineScope.parseAnnonce(pageUrl: String) {
     launch(Dispatchers.IO) {
-        val offerUrl = it.attr("href")
-        logger.info { "page[$page], offerUrl=$offerUrl" }
-        Jsoup.connect(offerUrl).get().run {
-            select("div[class=carrousel_slide][data-lazy]").forEach() {
-                val imgUrl = it.attr("data-lazy")
-                logger.info { "img=$imgUrl" }
 
+        // getting page
+        val pageContent = get(pageUrl).text
+        logger.info { "url=$pageUrl" }
 
-                // extracting picture url
-                val regex = """v\.seloger.*\.jpg""".toRegex()
-                val x = regex.find(imgUrl)
-                println(x)
-
-            }
+        // parsing page
+        val regx = Const.RegEx.pictures.toRegex()
+        val pics = regx.findAll(pageContent)
+        pics.forEach {
+            println(it.value)
         }
+
+
     }
 }

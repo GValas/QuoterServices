@@ -9,4 +9,6 @@ application {
 dependencies{
     implementation(Libs.jsoup)
     implementation(Libs.springBootStarterWeb)
+    implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
+    implementation(Libs.khttp)
 }
